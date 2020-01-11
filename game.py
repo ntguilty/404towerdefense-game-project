@@ -1,7 +1,7 @@
 import pygame
 import os
 from enemies.skeleton import Skeleton
-from enemies.warior import Warior
+from enemies.warrior import Warrior
 from base.allyBase import AllyBase
 import time
 import random
@@ -12,7 +12,7 @@ class Game:
         self.width = 1000
         self.height = 700
         self.win = pygame.display.set_mode((self.width, self.height))
-        self.enemys = [Warior()]
+        self.enemys = [Warrior()]
         self.units = []
         self.towers = [AllyBase(500, 500)]
         self.lives = 10
@@ -26,7 +26,7 @@ class Game:
         while run:
             if time.time() - self.timer > random.randrange(1,5):
                 self.timer = time.time()
-                self.enemys.append(random.choice([Warior(), Skeleton()]))
+                self.enemys.append(random.choice([Warrior(), Skeleton()]))
             clock.tick(60)
             #pygame.time.wait(500)
             for event in pygame.event.get():
