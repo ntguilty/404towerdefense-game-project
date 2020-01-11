@@ -6,6 +6,7 @@ from base.allyBase import AllyBase
 import time
 import random
 
+lives_img = pygame.image.load(os.path.join("game_assets/support_stuff", "heart-icon.png"))
 
 class Game:
     def __init__(self):
@@ -52,6 +53,12 @@ class Game:
             #loop through bases
             for b in self.towers:
                 b.attack(self.enemys)
+
+            # when you lose
+            if self.lives <= 0:
+                print("You lose")
+                run = False
+
             self.draw()
 
         pygame.quit()
@@ -70,6 +77,13 @@ class Game:
         #draw bases
         for b in self.towers:
             b.draw(self.win)
+
+        # draw lives
+        #TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
+        life = pygame.transform.scale(lives_img, (32,32))
+        start_x = self.width - life.get_width() - 5
+        for x in range(self.lives):
+            self.win.blit(life, (start_x - life.get_width()*x + 5, 10))
 
         pygame.display.update()
 
