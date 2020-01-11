@@ -19,6 +19,7 @@ class Game:
         self.money = 100
         self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
         self.timer = time.time()
+        self.clicks = [] # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
 
     def run(self):
         run = True
@@ -34,8 +35,10 @@ class Game:
                     run = False
 
                 pos = pygame.mouse.get_pos()
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    self.clicks.append(pos)
+                    print(pos)
 
             # loop through enemies
             to_del = []
@@ -55,6 +58,10 @@ class Game:
 
     def draw(self):
         self.win.blit(self.bg, (0, 0))
+
+        # draw clicks
+        for p in self.clicks:
+            pygame.draw.circle(self.win, (255, 0, 0), (p[0], p[1]), 5, 0)
 
         # draw enemies
         for en in self.enemys:
