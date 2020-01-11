@@ -10,8 +10,8 @@ lives_img = pygame.image.load(os.path.join("game_assets/support_stuff", "heart-i
 
 class Game:
     def __init__(self):
-        self.width = 1000
-        self.height = 700
+        self.width = 1600
+        self.height = 1000
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = [Warrior()]
         self.units = []
