@@ -96,9 +96,9 @@ class Enemy:
                     self.path_pos += 1
 
 
-    def hit(self):
+    def hit(self, damage):
         """Reduces health by one point and checks if enemy has died each call"""
-        self.health -= 1
+        self.health -= damage
         if self.health <= 0:
             return True
         return False
