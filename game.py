@@ -2,8 +2,8 @@ import pygame
 import os
 from enemies.skeleton import Skeleton
 from enemies.warrior import Warrior
-from base.allyBase import AllyBase
-from base.enemyBase import EnemyBase
+from towers.longRangeTower import LongRangeTower
+from towers.enemyBase import EnemyBase
 import time
 import random
 
@@ -16,7 +16,7 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = [Warrior()]
         self.units = []
-        self.towers = [AllyBase(500, 500)]
+        self.towers = [LongRangeTower(500, 500)]
         self.lives = 10
         self.money = 100
         self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))

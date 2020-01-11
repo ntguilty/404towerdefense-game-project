@@ -2,12 +2,12 @@ import pygame
 import os
 import math
 import time
-from .allyBase import AllyBase
+from .longRangeTower import LongRangeTower
 
 
 # TODO: jak sie uda to bedzie to baza 2giego gracza
 # TODO: jak na razie nie jest wykorzystana ta klasa
-class EnemyBase(AllyBase):
+class EnemyBase(LongRangeTower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.imgs = []

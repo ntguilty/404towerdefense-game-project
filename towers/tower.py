@@ -1,8 +1,8 @@
 import pygame
 
 
-class Base:
-    """Abstract class for base?"""
+class Tower:
+    """Abstract class for towers?"""
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -28,7 +28,7 @@ class Base:
         return False
 
     def upgrade(self):
-        """Upgrades base to higher tier at given cost"""
+        """Upgrades towers to higher tier at given cost"""
         self.level += 1
         self.damage += 1
 
