@@ -2,7 +2,8 @@ import pygame
 import os
 from enemies.skeleton import Skeleton
 from enemies.warrior import Warrior
-from base.allyBase import AllyBase
+from towers.longRangeTower import LongRangeTower
+from towers.enemyBase import EnemyBase
 import time
 import random
 
@@ -15,7 +16,7 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = [Warrior()]
         self.units = []
-        self.towers = [AllyBase(500, 500)]
+        self.towers = [LongRangeTower(500, 500)]
         self.lives = 10
         self.money = 100
         self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
@@ -50,9 +51,12 @@ class Game:
             for d in to_del:
                 self.enemys.remove(d)
 
-            #loop through bases
+            # loop through bases
             for b in self.towers:
-                b.attack(self.enemys)
+                if isinstance(b, EnemyBase):
+                    b.attack(self.units)
+                else:
+                    b.attack(self.enemys)
 
             # when you lose
             if self.lives <= 0:
