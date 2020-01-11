@@ -6,25 +6,25 @@ from .tower import Tower
 
 
 # TODO: dodać animacje wież(jakąkolwiek)
+# TODO: dodac jakiegos normalnego sprita do LongRangeTower
 class LongRangeTower(Tower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.imgs = []
-        self.range = 200
+        self.oryginal_range = 200
+        self.range = self.oryginal_range
         self.inRange = False
         self.left = True
         self.timer = time.time()
-        self.damage = 1
+        self.oryginal_damage = 1
+        self.damage = self.oryginal_damage
+        self.width = self.height = 128
 
         self.imgs.append(
-            pygame.transform.scale(pygame.image.load(os.path.join("game_assets/bases/", "base1.png")), (128, 128)))
+            pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers/", "base1.png")), (128, 128)))
 
     def draw(self, win):
-        # draw range circle
-        circle_surface = pygame.Surface((self.range * 2, self.range * 2), pygame.SRCALPHA, 32)
-        pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
-
-        win.blit(circle_surface, (self.x - self.range, self.y - self.range))
+        super().draw_radius(win)
         super().draw(win)
 
         base = self.imgs[0]

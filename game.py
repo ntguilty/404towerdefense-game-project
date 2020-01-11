@@ -4,10 +4,12 @@ from enemies.skeleton import Skeleton
 from enemies.warrior import Warrior
 from towers.longRangeTower import LongRangeTower
 from towers.enemyBase import EnemyBase
+from towers.supportTower import RangeTower, DamageTower
 import time
 import random
 
 lives_img = pygame.image.load(os.path.join("game_assets/support_stuff", "heart-icon.png"))
+
 
 class Game:
     def __init__(self):
@@ -16,22 +18,23 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = [Warrior()]
         self.units = []
-        self.towers = [LongRangeTower(500, 500)]
+        self.attack_towers = [LongRangeTower(500, 500)]
+        self.support_towers = [RangeTower(550, 500), DamageTower(450, 500)]
         self.lives = 10
         self.money = 100
         self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
         self.timer = time.time()
-        self.clicks = [] # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
+        self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
 
     def run(self):
         run = True
         clock = pygame.time.Clock()
         while run:
-            if time.time() - self.timer > random.randrange(1,5):
+            if time.time() - self.timer > random.randrange(1, 5):
                 self.timer = time.time()
                 self.enemys.append(random.choice([Warrior(), Skeleton()]))
             clock.tick(60)
-            #pygame.time.wait(500)
+            # pygame.time.wait(500)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
@@ -47,16 +50,20 @@ class Game:
             for en in self.enemys:
                 if en.x > 1000:
                     to_del.append(en)
-            #delete all the enemies
+            # delete all the enemies
             for d in to_del:
                 self.enemys.remove(d)
 
-            # loop through bases
-            for b in self.towers:
-                if isinstance(b, EnemyBase):
-                    b.attack(self.units)
+            # loop through attack towers
+            for t in self.attack_towers:
+                if isinstance(t, EnemyBase):
+                    t.attack(self.units)
                 else:
-                    b.attack(self.enemys)
+                    t.attack(self.enemys)
+
+            #loop through support towers
+            for t in self.support_towers:
+                t.support(self.attack_towers)
 
             # when you lose
             if self.lives <= 0:
@@ -78,18 +85,23 @@ class Game:
         for en in self.enemys:
             en.draw(self.win)
 
-        #draw bases
-        for b in self.towers:
-            b.draw(self.win)
+        # draw attack towers
+        for at in self.attack_towers:
+            at.draw(self.win)
+
+        #draw support towers
+        for st in self.support_towers:
+            st.draw(self.win)
 
         # draw lives
-        #TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
-        life = pygame.transform.scale(lives_img, (32,32))
+        # TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
+        life = pygame.transform.scale(lives_img, (32, 32))
         start_x = self.width - life.get_width() - 5
         for x in range(self.lives):
-            self.win.blit(life, (start_x - life.get_width()*x + 5, 10))
+            self.win.blit(life, (start_x - life.get_width() * x + 5, 10))
 
         pygame.display.update()
+
 
 g = Game()
 g.run()
