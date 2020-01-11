@@ -3,6 +3,7 @@ import os
 from enemies.skeleton import Skeleton
 from enemies.warrior import Warrior
 from base.allyBase import AllyBase
+from base.enemyBase import EnemyBase
 import time
 import random
 
@@ -50,9 +51,12 @@ class Game:
             for d in to_del:
                 self.enemys.remove(d)
 
-            #loop through bases
+            # loop through bases
             for b in self.towers:
-                b.attack(self.enemys)
+                if isinstance(b, EnemyBase):
+                    b.attack(self.units)
+                else:
+                    b.attack(self.enemys)
 
             # when you lose
             if self.lives <= 0:

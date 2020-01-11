@@ -51,7 +51,7 @@ class AllyBase(Base):
             first_enemy = enemy_closest[0]
             if time.time() - self.timer > 0.5:
                 self.timer = time.time()
-                if first_enemy.hit() == True:
+                if first_enemy.hit(self.damage) == True:
                     enemies.remove(first_enemy)
             if first_enemy.x > self.x and not (self.left):
                 self.left = True
