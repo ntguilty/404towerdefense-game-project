@@ -18,6 +18,7 @@ class Enemy:
         self.move_distance = 0
         self.imgs = []
         self.flipped = False
+        self.max_health = 0
 
     def draw(self, win):
         """draws the enemy with the given images"""
@@ -29,7 +30,17 @@ class Enemy:
         for dot in self.path:
             pygame.draw.circle(win, (255,0,0), dot,10, 0)
         win.blit(self.img, (self.x - self.img.get_width()/2, self.y - self.img.get_height()/2))
+        self.draw_health_var(win)
         self.move()
+
+    def draw_health_var(self, win):
+        """Draws health bar above unit"""
+        lenght = 50
+        move_by = round(lenght / self.max_health)
+        health_bar = move_by * self.health
+
+        pygame.draw.rect(win, (255, 0, 0), (self.x - 25, self.y - 30, lenght, 10), 0)
+        pygame.draw.rect(win, (0, 255, 0), (self.x - 25, self.y - 30, health_bar, 10), 0)
 
     def collide(self, X, Y):
         """Returns if the position has hit enemy"""
@@ -87,3 +98,4 @@ class Enemy:
         self.health -= 1
         if self.health <= 0:
             return True
+        return False

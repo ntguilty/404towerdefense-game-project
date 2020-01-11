@@ -4,7 +4,7 @@ import math
 import time
 from .base import Base
 
-
+# TODO: dodać animacje wież(jakąkolwiek)
 class AllyBase(Base):
     def __init__(self, x, y):
         super().__init__(x, y)
