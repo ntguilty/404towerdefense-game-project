@@ -18,13 +18,14 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = [Warrior()]
         self.units = []
-        self.attack_towers = [LongRangeTower(500, 500)]
-        self.support_towers = [RangeTower(550, 500), DamageTower(450, 500)]
+        self.attack_towers = [LongRangeTower(700, 500)]
+        self.support_towers = [RangeTower(250, 500), DamageTower(150, 300)]
         self.lives = 10
         self.money = 100
         self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
         self.timer = time.time()
         self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
+        self.selected_tower = None
 
     def run(self):
         run = True
@@ -42,8 +43,25 @@ class Game:
                 pos = pygame.mouse.get_pos()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.clicks.append(pos)
-                    print(pos)
+                    #odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
+                    #self.clicks.append(pos)
+                    #print(pos)
+                    # look if you clicked on attack tower
+                    for t in self.attack_towers:
+                        if t.click(pos[0], pos[1]):
+                            t.selected = True
+                            self.selected_tower = t
+                        else:
+                            t.selected = False
+
+                    # look if you clicked on support tower
+                    for t in self.support_towers:
+                        if t.click(pos[0], pos[1]):
+                            t.selected = True
+                            self.selected_tower = t
+                        else:
+                            t.selected = False
+
 
             # loop through enemies
             to_del = []
