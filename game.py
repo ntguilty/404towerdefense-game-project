@@ -27,6 +27,7 @@ class Game:
         self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
         self.selected_tower = None
 
+
     def run(self):
         run = True
         clock = pygame.time.Clock()
@@ -47,20 +48,27 @@ class Game:
                     #self.clicks.append(pos)
                     #print(pos)
                     # look if you clicked on attack tower
-                    for t in self.attack_towers:
-                        if t.click(pos[0], pos[1]):
-                            t.selected = True
-                            self.selected_tower = t
-                        else:
-                            t.selected = False
+                    btn_clicked = None
+                    if self.selected_tower:
+                        btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
+                        if btn_clicked:
+                            print(btn_clicked)
 
-                    # look if you clicked on support tower
-                    for t in self.support_towers:
-                        if t.click(pos[0], pos[1]):
-                            t.selected = True
-                            self.selected_tower = t
-                        else:
-                            t.selected = False
+                    if not(btn_clicked):
+                        for t in self.attack_towers:
+                            if t.click(pos[0], pos[1]):
+                                t.selected = True
+                                self.selected_tower = t
+                            else:
+                                t.selected = False
+
+                        # look if you clicked on support tower
+                        for t in self.support_towers:
+                            if t.click(pos[0], pos[1]):
+                                t.selected = True
+                                self.selected_tower = t
+                            else:
+                                t.selected = False
 
 
             # loop through enemies

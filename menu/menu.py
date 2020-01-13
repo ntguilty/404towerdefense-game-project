@@ -1,14 +1,88 @@
 import pygame
+import os
+
+class Button:
+    """
+    Button class for menu objects
+    """
+    def __init__(self, menu, img, name):
+        self.name = name
+        self.img = img
+        self.x = menu.x - 50
+        self.y = menu.y - 110
+        self.menu = menu
+        self.width = self.img.get_width()
+        self.height = self.img.get_height()
+
+    def click(self, X, Y):
+        """
+        returns if the positon has collided with the menu
+        :param X: int
+        :param Y: int
+        :return: bool
+        """
+        if X <= self.x + self.width and X >= self.x:
+            if Y <= self.y + self.height and Y >= self.y:
+                return True
+        return False
+
+    def draw(self, win):
+        """
+        draws the button image
+        :param win: surface
+        :return: None
+        """
+        win.blit(self.img, (self.x, self.y))
+
+    def update(self):
+        """
+        updates button position
+        :return: None
+        """
+        self.x = self.menu.x - 50
+        self.y = self.menu.y - 110
+
 
 class Menu:
-    def __init__(self, x, y):
+
+    def __init__(self, x, y, img):
         self.x = x
         self.y = y
-        self.width = 0
-        self.height = 0
+        self.width = img.get_width()
+        self.height = img.get_height()
         self.item_names = []
+        self.buttons = []
         self.imgs = []
         self.items = 0
+        self.bg = img
 
-    def click(self, x, y):
-        pass
+    def add_btn(self, img, name):
+        """
+        adds buttons to menu
+        :param img: surface
+        :param name: str
+        :return: None
+        """
+        self.items += 1
+        inc_x = self.width/self.items/2
+        btn_x = self.items * inc_x - img.get_width()/2
+        btn_y = self.y + self.height/2 - img.get_height()/2
+        self.buttons.append(Button(self, img, name))
+    def draw(self, win):
+        """
+        draws btns and menu bg
+        :param win: surface
+        :return: None
+        """
+        win.blit(self.bg, (self.x - self.bg.get_width()/2, self.y-120))
+        for item in self.buttons:
+            item.draw(win)
+
+
+
+    def get_clicked(self, X, Y):
+        for btn in self.buttons:
+            if btn.click(X, Y):
+                return btn.name
+
+        return None
