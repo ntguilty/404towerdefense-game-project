@@ -58,8 +58,8 @@ class Game:
         self.attack_towers = [LongRangeTower(700, 500)]
         self.support_towers = [RangeTower(250, 500), DamageTower(150, 300)]
         self.lives = 10
-        self.money = 100
-        self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
+        self.money = 500000
+        self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")), (1600, 1000))
         self.timer = time.time()
         self.font = pygame.font.SysFont("comicsans", 70)
         self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
@@ -116,13 +116,16 @@ class Game:
                         self.pause = not (self.pause)
                         self.playPauseButton.paused = self.pause
 
-                    # look if you clicked on attack tower
+                    # look if you clicked on attack tower or support tower
                     btn_clicked = None
                     if self.selected_tower:
                         btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
                         if btn_clicked:
                             if btn_clicked == "Upgrade":
-                                self.selected_tower.upgrade()
+                                cost = self.selected_tower.get_upgrade_cost()
+                                if self.money >= cost:
+                                    if self.selected_tower.upgrade() == True:
+                                        self.money -= cost
 
                     if not (btn_clicked):
                         for t in self.attack_towers:

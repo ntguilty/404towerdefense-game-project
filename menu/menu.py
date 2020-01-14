@@ -90,6 +90,10 @@ class Menu:
         btn_x = self.items * inc_x - img.get_width()/2
         btn_y = self.y + self.height/2 - img.get_height()/2
         self.buttons.append(Button(self, img, name))
+
+    def get_item_cost(self):
+        return self.item_cost[self.tower.level - 1]
+
     def draw(self, win):
         """
         draws btns and menu bg
