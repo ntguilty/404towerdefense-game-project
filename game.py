@@ -13,14 +13,16 @@ import random
 pygame.init()
 pygame.display.set_mode((1600, 1000))
 
+
+
 lives_img = pygame.image.load(os.path.join("game_assets/support_stuff", "heart-icon.png"))
 money_img = pygame.image.load(os.path.join("game_assets/support_stuff", "money.png"))
 
-vertical_img = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "vertical_menu.png")), (120, 500))
+vertical_img = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "vertical_menu.png")), (100, 450))
 
-longRangeshortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "base1.png")), (50, 50))
-rangeShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "damage_tower.png")), (50, 50))
-damageShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "range_tower.png")), (50, 50))
+longRangeshortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "base1.png")), (50, 70))
+rangeShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "damage_tower.png")), (70, 70))
+damageShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "range_tower.png")), (70, 70))
 
 
 play_img = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "play_button.png")),
@@ -31,6 +33,9 @@ play_btn = pygame.transform.scale(
     pygame.image.load(os.path.join("game_assets/support_stuff", "play_button.png")).convert_alpha(), (75, 75))
 pause_btn = pygame.transform.scale(
     pygame.image.load(os.path.join("game_assets/support_stuff", "pause_button.png")).convert_alpha(), (75, 75))
+
+attack_tower_names = ['LongRangeTower']
+support_tower_names = ['RangeTower', 'DamageTower']
 
 # TODO: jak juz doda sie wiecej przeciwnikow to trzeba je zupdatowac. Moze nawet wymyslec lepszy sposob na ich
 #  wysylanie (Kacpur) fale przeciwnikow format : (# skeleton, # warrior)
@@ -55,13 +60,13 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = []
         self.units = []
-        self.attack_towers = [LongRangeTower(700, 500)]
-        self.support_towers = [RangeTower(250, 500), DamageTower(150, 300)]
+        self.attack_towers = [LongRangeTower(840, 420)]
+        self.support_towers = [RangeTower(810, 500), DamageTower(660, 300)]
         self.lives = 10
         self.money = 100
-        self.bg = pygame.image.load(os.path.join("game_assets/support_stuff", "bg3.png"))
+        self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")), (1600, 1000))
         self.timer = time.time()
-        self.font = pygame.font.SysFont("comicsans", 70)
+        self.font = pygame.font.SysFont("comicsans", 35)
         self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
         self.selected_tower = None
         self.wave = 0
@@ -72,6 +77,7 @@ class Game:
         self.menu.add_btn(longRangeshortcut, "longRangeTower", 500)
         self.menu.add_btn(rangeShortcut, "rangeTower", 750)
         self.menu.add_btn(damageShortcut, "damageTower", 1000)
+        self.moving_object = None
 
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
@@ -100,6 +106,22 @@ class Game:
                 if time.time() - self.timer > random.randrange(1, 5):
                     self.timer = time.time()
                     self.gen_enemies()
+
+            if self.moving_object:
+                self.moving_object.move(pos[0], pos[1])
+                tower_list = self.attack_towers[:] + self.support_towers[:]
+                collide = False
+                for tower in tower_list:
+                    if tower.collide(self.moving_object):
+                        collide = True
+                        tower.place_color = (255, 0, 0, 100)
+                        self.moving_object.place_color = (255, 0, 0, 100)
+                    else:
+                        tower.place_color = (0, 0, 255, 100)
+                        if not collide:
+                            self.moving_object.place_color = (0, 0, 255, 100)
+
+
             # main event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -108,37 +130,57 @@ class Game:
                 pos = pygame.mouse.get_pos()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
-                    # self.clicks.append(pos)
-                    # print(pos)
-                    # sprawdzanie przyciskow pauza/graj:
-                    if self.playPauseButton.click(pos[0], pos[1]):
-                        self.pause = not (self.pause)
-                        self.playPauseButton.paused = self.pause
 
-                    # look if you clicked on attack tower
-                    btn_clicked = None
-                    if self.selected_tower:
-                        btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
-                        if btn_clicked:
-                            if btn_clicked == "Upgrade":
-                                self.selected_tower.upgrade()
+                    # if youre moving an object and click
+                    if self.moving_object:
+                        if self.moving_object.name in attack_tower_names:
+                            self.attack_towers.append(self.moving_object)
+                        elif self.moving_object.name in support_tower_names:
+                            self.support_towers.append(self.moving_object)
+                        self.moving_object.moving = False
+                        self.moving_object = None
+                    else:
+                        # look if you click on side menu
+                        side_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                        if side_menu_button:
+                            cost = self.menu.get_item_cost(side_menu_button)
+                            if self.money >= cost:
+                                self.money -= cost
+                                self.add_tower(side_menu_button)
 
-                    if not (btn_clicked):
-                        for t in self.attack_towers:
-                            if t.click(pos[0], pos[1]):
-                                t.selected = True
-                                self.selected_tower = t
-                            else:
-                                t.selected = False
 
-                        # look if you clicked on support tower
-                        for t in self.support_towers:
-                            if t.click(pos[0], pos[1]):
-                                t.selected = True
-                                self.selected_tower = t
-                            else:
-                                t.selected = False
+                        # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
+                    #self.clicks.append(pos)
+                    #print(pos)
+                        # sprawdzanie przyciskow pauza/graj:
+                        if self.playPauseButton.click(pos[0], pos[1]):
+                            self.pause = not (self.pause)
+                            self.playPauseButton.paused = self.pause
+
+                        # look if you clicked on attack tower
+
+                        btn_clicked = None
+                        if self.selected_tower:
+                            btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
+                            if btn_clicked:
+                                if btn_clicked == "Upgrade":
+                                    self.selected_tower.upgrade()
+
+                        if not (btn_clicked):
+                            for t in self.attack_towers:
+                                if t.click(pos[0], pos[1]):
+                                    t.selected = True
+                                    self.selected_tower = t
+                                else:
+                                    t.selected = False
+
+                            # look if you clicked on support tower
+                            for t in self.support_towers:
+                                if t.click(pos[0], pos[1]):
+                                    t.selected = True
+                                    self.selected_tower = t
+                                else:
+                                    t.selected = False
 
             if not (self.pause):
                 # loop through enemies
@@ -195,17 +237,22 @@ class Game:
         self.menu.draw(self.win)
 
 
+        # draw moving object
+        if self.moving_object:
+            self.moving_object.draw(self.win)
+
+
         # draw play pause button
         self.playPauseButton.draw(self.win)
 
         # TODO: trzeba trzeba ladnie ulozyc zycia i pieniadze
         # draw money
         text = self.font.render(str(self.money), 1, (255, 255, 255))
-        money = pygame.transform.scale(money_img, (60, 60))
-        start_x = self.width - 350
+        money = pygame.transform.scale(money_img, (35, 35))
+        start_x = self.width - 35
 
-        self.win.blit(text, (start_x - text.get_width() - 10, 35))
-        self.win.blit(money, (start_x, 27))
+        self.win.blit(text, (start_x - text.get_width() - 1, 42))
+        self.win.blit(money, (start_x, 35))
 
         # draw lives
         # TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
@@ -215,6 +262,20 @@ class Game:
             self.win.blit(life, (start_x - life.get_width() * x + 5, 10))
 
         pygame.display.update()
+
+    def add_tower(self, name):
+        x, y = pygame.mouse.get_pos()
+        name_list = ["longRangeTower", "damageTower", "rangeTower"]
+        object_list = [LongRangeTower(x, y), DamageTower(x, y), RangeTower(x, y)]
+
+        try:
+            obj = object_list[name_list.index(name)]
+            self.moving_object = obj
+            obj.moving = True
+        except Exception as e:
+            print(str(e) + "NOT VALID NAME")
+
+
 
 
 g = Game()

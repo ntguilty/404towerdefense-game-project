@@ -4,11 +4,10 @@ from enemies.enemy import Enemy
 
 imgs = []
 
-for x in range(1, 5):
+for x in range(1, 4):
     add_str = str(x)
-    add_str = "0" + add_str
     imgs.append(pygame.transform.scale(
-        pygame.image.load(os.path.join("game_assets/enemies/skeleton", "skeleton" + add_str + ".png")), (48, 48)))
+        pygame.image.load(os.path.join("game_assets/enemies/skeleton", "birds" + add_str + ".png")), (70, 70)))
 
 
 class Skeleton(Enemy):

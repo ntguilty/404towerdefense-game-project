@@ -2,7 +2,7 @@ import pygame
 import os
 pygame.font.init()
 
-upg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "money.png")), (45,45))
+upg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "money.png")), (25,25))
 
 class Button:
     """
@@ -133,8 +133,8 @@ class VerticalMenu(Menu):
         :return: None
         """
         self.items += 1
-        btn_x = self.x - 40
-        btn_y = self.y-100 + (self.items-1)*120
+        btn_x = self.x + 30
+        btn_y = self.y + 380 + (self.items-1)*100
         self.buttons.append(VerticalButton(btn_x, btn_y, img, name, cost))
 
     def get_item_cost(self, name):
@@ -154,12 +154,12 @@ class VerticalMenu(Menu):
         :param win: surface
         :return: None
         """
-        win.blit(self.bg, (self.x - self.bg.get_width()/2, self.y-120))
+        win.blit(self.bg, (self.x - self.bg.get_width()/2 + 60, self.y+350))
         for item in self.buttons:
             item.draw(win)
-            win.blit(upg, (item.x+10, item.y + item.height + 25))
+            win.blit(upg, (item.x + 40, item.y + item.height))
             text = self.font.render(str(item.cost), 1, (255,255,255))
-            win.blit(text, (item.x + item.width/2 - text.get_width()/2 + 7, item.y + item.height + 5))
+            win.blit(text, (item.x + item.width/2 - text.get_width()/2 - 8, item.y + item.height + 5))
 
 
 class VerticalButton(Button):

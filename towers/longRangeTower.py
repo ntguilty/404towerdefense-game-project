@@ -22,19 +22,27 @@ class LongRangeTower(Tower):
         self.oryginal_damage = 1
         self.damage = self.oryginal_damage
         self.width = self.height = 128
-
+        self.moving = False
         self.menu = Menu(self, self.x, self.y, menu_bg, [4000, 8000, "MAX"])
         self.menu.add_btn(upgrade_btn, "Upgrade")
+        self.name = "LongRangeTower"
+
 
         self.imgs.append(
-            pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers/", "base1.png")), (128, 128)))
+            pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers/", "base1.png")), (50, 100)))
 
     def draw(self, win):
         super().draw_radius(win)
         super().draw(win)
-
+        # TODO: nie jestem pewien co do tego, Kacper zapomniałeś o tym ziomek chyba
+        if self.inRange and not self.moving:
+            self.archer_count += 1
+            if self.archer_count >= len(self.imgs) * 10:
+                self.archer_count = 0
+        else:
+            self.archer_count = 0
+        # dotąd jest nowe
         base = self.imgs[0]
-        win.blit(base, ((self.x + self.width / 2) - (base.get_width() / 2), (self.y - base.get_height())))
 
     def change_range(self, r):
         self.range = r
