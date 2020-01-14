@@ -61,7 +61,7 @@ class Game:
         self.enemys = []
         self.units = []
         self.attack_towers = [LongRangeTower(840, 420)]
-        self.support_towers = [RangeTower(810, 500), DamageTower(660, 300)]
+        self.support_towers = [RangeTower(810, 550), DamageTower(660, 300)]
         self.lives = 10
         self.money = 500000
         self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")), (1600, 1000))
