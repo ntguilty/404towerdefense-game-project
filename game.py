@@ -34,8 +34,8 @@ play_btn = pygame.transform.scale(
 pause_btn = pygame.transform.scale(
     pygame.image.load(os.path.join("game_assets/support_stuff", "pause_button.png")).convert_alpha(), (75, 75))
 
-attack_tower_names = ['LongRangeTower']
-support_tower_names = ['RangeTower', 'DamageTower']
+attack_tower_names = ['longRangeTower']
+support_tower_names = ['rangeTower', 'damageTower']
 
 # TODO: jak juz doda sie wiecej przeciwnikow to trzeba je zupdatowac. Moze nawet wymyslec lepszy sposob na ich
 #  wysylanie (Kacpur) fale przeciwnikow format : (# skeleton, # warrior)
@@ -108,6 +108,9 @@ class Game:
                     self.timer = time.time()
                     self.gen_enemies()
 
+            pos = pygame.mouse.get_pos()
+
+            # check for moving object
             if self.moving_object:
                 self.moving_object.move(pos[0], pos[1])
                 tower_list = self.attack_towers[:] + self.support_towers[:]
@@ -128,43 +131,55 @@ class Game:
                 if event.type == pygame.QUIT:
                     run = False
 
-                pos = pygame.mouse.get_pos()
-
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
-                    # self.clicks.append(pos)
-                    # print(pos)
-                    # sprawdzanie przyciskow pauza/graj:
-                    if self.playPauseButton.click(pos[0], pos[1]):
-                        self.pause = not (self.pause)
-                        self.playPauseButton.paused = self.pause
+                    # if youre moving an object and click
+                    if self.moving_object:
+                        if self.moving_object.name in attack_tower_names:
+                            self.attack_towers.append(self.moving_object)
+                        elif self.moving_object.name in support_tower_names:
+                            self.support_towers.append(self.moving_object)
+                        self.moving_object.moving = False
+                        self.moving_object = None
+                    else:
+                        # look if you click on side menu
+                        side_menu_button = self.menu.get_clicked(pos[0], pos[1])
+                        if side_menu_button:
+                            self.add_tower(side_menu_button)
 
-                    # look if you clicked on attack tower or support tower
-                    btn_clicked = None
-                    if self.selected_tower:
-                        btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
-                        if btn_clicked:
-                            if btn_clicked == "Upgrade":
-                                cost = self.selected_tower.get_upgrade_cost()
-                                if self.money >= cost:
-                                    if self.selected_tower.upgrade() == True:
-                                        self.money -= cost
+                        # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
+                        # self.clicks.append(pos)
+                        # print(pos)
+                        # sprawdzanie przyciskow pauza/graj:
+                        if self.playPauseButton.click(pos[0], pos[1]):
+                            self.pause = not (self.pause)
+                            self.playPauseButton.paused = self.pause
 
-                    if not (btn_clicked):
-                        for t in self.attack_towers:
-                            if t.click(pos[0], pos[1]):
-                                t.selected = True
-                                self.selected_tower = t
-                            else:
-                                t.selected = False
+                        # look if you clicked on attack tower or support tower
+                        btn_clicked = None
+                        if self.selected_tower:
+                            btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
+                            if btn_clicked:
+                                if btn_clicked == "Upgrade":
+                                    cost = self.selected_tower.get_upgrade_cost()
+                                    if self.money >= cost:
+                                        if self.selected_tower.upgrade() == True:
+                                            self.money -= cost
 
-                        # look if you clicked on support tower
-                        for t in self.support_towers:
-                            if t.click(pos[0], pos[1]):
-                                t.selected = True
-                                self.selected_tower = t
-                            else:
-                                t.selected = False
+                        if not (btn_clicked):
+                            for t in self.attack_towers:
+                                if t.click(pos[0], pos[1]):
+                                    t.selected = True
+                                    self.selected_tower = t
+                                else:
+                                    t.selected = False
+
+                            # look if you clicked on support tower
+                            for t in self.support_towers:
+                                if t.click(pos[0], pos[1]):
+                                    t.selected = True
+                                    self.selected_tower = t
+                                else:
+                                    t.selected = False
 
             if not (self.pause):
                 # loop through enemies
@@ -195,6 +210,7 @@ class Game:
                     run = False
 
             self.draw()
+
 
         pygame.quit()
 
@@ -249,7 +265,7 @@ class Game:
 
     def add_tower(self, name):
         x, y = pygame.mouse.get_pos()
-        name_list = ["longRangeTower", "damageTower", "rangeTower"]
+        name_list = ["longRangeTower", "rangeTower", "damageTower"]
         object_list = [LongRangeTower(x, y), DamageTower(x, y), RangeTower(x, y)]
 
         try:

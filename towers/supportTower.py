@@ -26,6 +26,7 @@ class RangeTower(Tower):
         temp.append("MAX")
         self.menu = Menu(self, self.x, self.y, menu_bg, temp)
         self.menu.add_btn(upgrade_btn, "Upgrade")
+        self.name = "rangeTower"
 
 
     def get_upgrade_cost(self):
@@ -66,6 +67,7 @@ class DamageTower(Tower):
         temp.append("MAX")
         self.menu = Menu(self, self.x, self.y, menu_bg, temp)
         self.menu.add_btn(upgrade_btn, "Upgrade")
+        self.name = "damageTower"
 
     def get_upgrade_cost(self):
         return self.price[self.level - 1]

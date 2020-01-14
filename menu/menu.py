@@ -114,6 +114,14 @@ class Menu:
 
         return None
 
+    def update(self):
+        """
+        update menu and button location
+        :return: None
+        """
+        for btn in self.buttons:
+            btn.update()
+
 
 class VerticalMenu(Menu):
     """
