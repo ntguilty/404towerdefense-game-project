@@ -9,7 +9,7 @@ class Enemy:
         self.height = 32
         self.animation_count = 0
         self.health = 1
-        self.vel = 1  # velocity - how fast unit moves
+        self.vel = 1  # velocity - how fast unit moves TODO: usunac bo bezuzyteczne
         self.path = [(113, 559), (110, 607),(108, 652), (109, 701), (107, 752), (109, 802), (118, 852), (141, 889), (178, 919),
                      (225, 943), (293, 946), (367, 946), (430, 947), (486, 945), (560, 947), (625, 940), (654, 908), (667, 852),
                      (623, 799), (565, 760), (505, 718), (460, 665), (479, 586), (550, 538), (598, 477), (593, 397), (579, 301),
@@ -23,9 +23,11 @@ class Enemy:
         self.move_count = 0
         self.move_distance = 0
         self.imgs = []
+        self.flipped_vert = False
+        self.flipped_hor = False
         self.flipped = False
         self.max_health = 0
-        self.speed_increase = 10
+        self.speed_increase = 5
 
     def draw(self, win):
         """draws the enemy with the given images"""
@@ -65,17 +67,27 @@ class Enemy:
         dirn = ((x2 - self.x)*2, (y2 - self.y)*2)
         length = math.sqrt((dirn[0]) ** 2 + (dirn[1]) ** 2)
         dirn = (dirn[0] / length * self.speed_increase, (dirn[1]) / length * self.speed_increase)
-        if x1 == 942:
-            print(dirn)
 
-        if dirn[0] < 0 and not self.flipped:
-            self.flipped = True
-            for y, img in enumerate(self.imgs):
-                self.imgs[y] = pygame.transform.flip(img, True, False)
-        if dirn[0] > 0 and self.flipped:
-            self.flipped = False
-            for y, img in enumerate(self.imgs):
-                self.imgs[y] = pygame.transform.flip(img, True, False)
+        if abs(dirn[0]) < abs(dirn[1]):
+            self.imgs = self.imgs_temp1
+            if dirn[1] > 0 and self.flipped_vert:
+                self.flipped_vert = False
+                for y, img in enumerate(self.imgs):
+                    self.imgs[y] = pygame.transform.flip(img, False, True)
+            if dirn[1] < 0 and not self.flipped_vert:
+                self.flipped_vert = True
+                for y, img in enumerate(self.imgs):
+                    self.imgs[y] = pygame.transform.flip(img, False, True)
+        else:
+            self.imgs = self.imgs_temp2
+            if dirn[0] > 0 and self.flipped_hor:
+                self.flipped_hor = False
+                for y, img in enumerate(self.imgs):
+                    self.imgs[y] = pygame.transform.flip(img, True, False)
+            if dirn[0] < 0 and not self.flipped_hor:
+                self.flipped_hor = True
+                for y, img in enumerate(self.imgs):
+                    self.imgs[y] = pygame.transform.flip(img, True, False)
 
         move_x, move_y = (self.x + dirn[0], self.y + dirn[1])
         self.x = move_x
