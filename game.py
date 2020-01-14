@@ -141,12 +141,18 @@ class Game:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # if youre moving an object and click
                     if self.moving_object:
-                        if self.moving_object.name in attack_tower_names:
-                            self.attack_towers.append(self.moving_object)
-                        elif self.moving_object.name in support_tower_names:
-                            self.support_towers.append(self.moving_object)
-                        self.moving_object.moving = False
-                        self.moving_object = None
+                        not_allowed = False
+                        tower_list = self.attack_towers[:] + self.support_towers[:]
+                        for tower in tower_list:
+                            if tower.collide(self.moving_object):
+                                not_allowed = True
+                        if not not_allowed:
+                            if self.moving_object.name in attack_tower_names:
+                                self.attack_towers.append(self.moving_object)
+                            elif self.moving_object.name in support_tower_names:
+                                self.support_towers.append(self.moving_object)
+                            self.moving_object.moving = False
+                            self.moving_object = None
                     else:
                         # look if you click on side menu
                         side_menu_button = self.menu.get_clicked(pos[0], pos[1])
@@ -237,6 +243,15 @@ class Game:
 
     def draw(self):
         self.win.blit(self.bg, (0, 0))
+
+        if self.moving_object:
+            for tower in self.attack_towers:
+                tower.draw_placement(self.win)
+
+            for tower in self.support_towers:
+                tower.draw_placement(self.win)
+
+            self.moving_object.draw_placement(self.win)
 
         # draw clicks
         for p in self.clicks:

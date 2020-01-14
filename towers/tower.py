@@ -23,6 +23,7 @@ class Tower:
         self.menu.add_btn(upgrade_btn, "Upgrade")
         self.imgs = []
         self.damage = 1
+        self.place_color = (0,0,255, 100)
 
     def draw(self, win):
         # TODO: dodaj wiecej spritow zeby pokazac ulepszanie wiez, ustawione normalnie na self.level - 1
@@ -40,6 +41,13 @@ class Tower:
             pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.range, self.range), self.range, 0)
 
             win.blit(circle_surface, (self.x - self.range, self.y - self.range))
+
+    def draw_placement(self,win):
+        # draw range circle
+        surface = pygame.Surface((self.range * 4, self.range * 4), pygame.SRCALPHA, 32)
+        pygame.draw.circle(surface, self.place_color, (50,50), 50, 0)
+
+        win.blit(surface, (self.x - 50, self.y - 50))
 
     def click(self, X, Y):
         """Returns if tower has been clicked on
