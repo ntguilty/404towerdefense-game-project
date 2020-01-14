@@ -63,7 +63,7 @@ class Game:
         self.attack_towers = [LongRangeTower(840, 420)]
         self.support_towers = [RangeTower(810, 500), DamageTower(660, 300)]
         self.lives = 10
-        self.money = 100
+        self.money = 500000
         self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")), (1600, 1000))
         self.timer = time.time()
         self.font = pygame.font.SysFont("comicsans", 35)
@@ -130,57 +130,40 @@ class Game:
                 pos = pygame.mouse.get_pos()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
+                    # self.clicks.append(pos)
+                    # print(pos)
+                    # sprawdzanie przyciskow pauza/graj:
+                    if self.playPauseButton.click(pos[0], pos[1]):
+                        self.pause = not (self.pause)
+                        self.playPauseButton.paused = self.pause
 
-                    # if youre moving an object and click
-                    if self.moving_object:
-                        if self.moving_object.name in attack_tower_names:
-                            self.attack_towers.append(self.moving_object)
-                        elif self.moving_object.name in support_tower_names:
-                            self.support_towers.append(self.moving_object)
-                        self.moving_object.moving = False
-                        self.moving_object = None
-                    else:
-                        # look if you click on side menu
-                        side_menu_button = self.menu.get_clicked(pos[0], pos[1])
-                        if side_menu_button:
-                            cost = self.menu.get_item_cost(side_menu_button)
-                            if self.money >= cost:
-                                self.money -= cost
-                                self.add_tower(side_menu_button)
+                    # look if you clicked on attack tower or support tower
+                    btn_clicked = None
+                    if self.selected_tower:
+                        btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
+                        if btn_clicked:
+                            if btn_clicked == "Upgrade":
+                                cost = self.selected_tower.get_upgrade_cost()
+                                if self.money >= cost:
+                                    if self.selected_tower.upgrade() == True:
+                                        self.money -= cost
 
+                    if not (btn_clicked):
+                        for t in self.attack_towers:
+                            if t.click(pos[0], pos[1]):
+                                t.selected = True
+                                self.selected_tower = t
+                            else:
+                                t.selected = False
 
-                        # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
-                    #self.clicks.append(pos)
-                    #print(pos)
-                        # sprawdzanie przyciskow pauza/graj:
-                        if self.playPauseButton.click(pos[0], pos[1]):
-                            self.pause = not (self.pause)
-                            self.playPauseButton.paused = self.pause
-
-                        # look if you clicked on attack tower
-
-                        btn_clicked = None
-                        if self.selected_tower:
-                            btn_clicked = self.selected_tower.menu.get_clicked(pos[0], pos[1])
-                            if btn_clicked:
-                                if btn_clicked == "Upgrade":
-                                    self.selected_tower.upgrade()
-
-                        if not (btn_clicked):
-                            for t in self.attack_towers:
-                                if t.click(pos[0], pos[1]):
-                                    t.selected = True
-                                    self.selected_tower = t
-                                else:
-                                    t.selected = False
-
-                            # look if you clicked on support tower
-                            for t in self.support_towers:
-                                if t.click(pos[0], pos[1]):
-                                    t.selected = True
-                                    self.selected_tower = t
-                                else:
-                                    t.selected = False
+                        # look if you clicked on support tower
+                        for t in self.support_towers:
+                            if t.click(pos[0], pos[1]):
+                                t.selected = True
+                                self.selected_tower = t
+                            else:
+                                t.selected = False
 
             if not (self.pause):
                 # loop through enemies

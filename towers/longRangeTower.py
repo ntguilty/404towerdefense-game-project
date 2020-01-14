@@ -22,14 +22,21 @@ class LongRangeTower(Tower):
         self.oryginal_damage = 1
         self.damage = self.oryginal_damage
         self.width = self.height = 128
-        self.moving = False
-        self.menu = Menu(self, self.x, self.y, menu_bg, [4000, 8000, "MAX"])
+        self.price = [2000, 4000, 0]
+        temp = []
+        for x in range(len(self.price) - 1):
+            temp.append(str(self.price[x]))
+        temp.append("MAX")
+        self.menu = Menu(self, self.x, self.y, menu_bg, temp)
         self.menu.add_btn(upgrade_btn, "Upgrade")
         self.name = "LongRangeTower"
 
 
         self.imgs.append(
             pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers/", "base1.png")), (50, 100)))
+
+    def get_upgrade_cost(self):
+        return self.price[self.level - 1]
 
     def draw(self, win):
         super().draw_radius(win)

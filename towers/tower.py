@@ -52,9 +52,12 @@ class Tower:
     def upgrade(self):
         """Upgrades towers to higher tier at given cost"""
         # instead of next sprites is only block by number
-        if self.level < 2:
+        if self.level < len(self.price):
             self.level += 1
             self.damage += 1
+            return True
+        else:
+            return False
 
     def get_upgrade_cost(self):
         return self.price[self.level - 1]
