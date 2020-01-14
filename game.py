@@ -6,6 +6,7 @@ from menu.menu import PlayPauseButton
 from towers.longRangeTower import LongRangeTower
 from towers.enemyBase import EnemyBase
 from towers.supportTower import RangeTower, DamageTower
+from menu.menu import VerticalMenu
 import time
 import random
 
@@ -14,6 +15,13 @@ pygame.display.set_mode((1600, 1000))
 
 lives_img = pygame.image.load(os.path.join("game_assets/support_stuff", "heart-icon.png"))
 money_img = pygame.image.load(os.path.join("game_assets/support_stuff", "money.png"))
+
+vertical_img = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "vertical_menu.png")), (120, 500))
+
+longRangeshortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "base1.png")), (50, 50))
+rangeShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "damage_tower.png")), (50, 50))
+damageShortcut = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers", "range_tower.png")), (50, 50))
+
 
 play_img = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "play_button.png")),
                                   (75, 75))
@@ -60,6 +68,10 @@ class Game:
         self.current_wave = waves[self.wave][:]
         self.pause = True
         self.playPauseButton = PlayPauseButton(play_btn, pause_btn, 10, self.height - 85)
+        self.menu = VerticalMenu(self.width - vertical_img.get_width() - 5, 200, vertical_img)
+        self.menu.add_btn(longRangeshortcut, "longRangeTower", 500)
+        self.menu.add_btn(rangeShortcut, "rangeTower", 750)
+        self.menu.add_btn(damageShortcut, "damageTower", 1000)
 
     def gen_enemies(self):
         if sum(self.current_wave) == 0:
@@ -178,6 +190,10 @@ class Game:
         # draw support towers
         for st in self.support_towers:
             st.draw(self.win)
+
+        # draw vertical menu
+        self.menu.draw(self.win)
+
 
         # draw play pause button
         self.playPauseButton.draw(self.win)

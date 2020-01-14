@@ -61,3 +61,5 @@ class DamageTower(Tower):
 
         for tower in effected:
             tower.damage = tower.oryginal_damage * self.effect[self.level - 1]
+
+
