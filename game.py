@@ -65,7 +65,7 @@ class Game:
         self.attack_towers = [LongRangeTower(920, 280)]
         self.support_towers = [RangeTower(810, 550), DamageTower(660, 300)]
         self.lives = 10
-        self.money = 500000
+        self.money = 5000
         self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")),
                                          (1600, 1000))
         self.timer = time.time()
@@ -151,7 +151,12 @@ class Game:
                         # look if you click on side menu
                         side_menu_button = self.menu.get_clicked(pos[0], pos[1])
                         if side_menu_button:
-                            self.add_tower(side_menu_button)
+                            cost = self.menu.get_item_cost(side_menu_button)
+                            if self.money >= cost:
+                                self.money -= cost
+                                self.add_tower(side_menu_button)
+                            else:
+                                print("You don't have enough money")
 
                         # odkomentowac i zakomentowac inne przy ustalaniu nowego path na mapie
                         # self.clicks.append(pos)

@@ -9,7 +9,7 @@ class Enemy:
         self.height = 32
         self.animation_count = 0
         self.health = 1
-        self.vel = 2  # velocity - how fast unit moves
+        self.vel = 1  # velocity - how fast unit moves
         self.path = [(113, 559), (110, 607),(108, 652), (109, 701), (107, 752), (109, 802), (118, 852), (141, 889), (178, 919),
                      (225, 943), (293, 946), (367, 946), (430, 947), (486, 945), (560, 947), (625, 940), (654, 908), (667, 852),
                      (623, 799), (565, 760), (505, 718), (460, 665), (479, 586), (550, 538), (598, 477), (593, 397), (579, 301),
@@ -25,7 +25,7 @@ class Enemy:
         self.imgs = []
         self.flipped = False
         self.max_health = 0
-        self.speed_increase = 1
+        self.speed_increase = 10
 
     def draw(self, win):
         """draws the enemy with the given images"""
