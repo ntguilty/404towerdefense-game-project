@@ -1,3 +1,4 @@
+import os
 import pygame
 import math
 
@@ -15,13 +16,14 @@ class Enemy:
                      (943, 485), (961, 487), (973, 486), (983, 476), (988, 355), (996, 235)]
         self.x = self.path[0][0]
         self.y = self.path[0][1]
-        self.img = None
+        self.img = pygame.image.load(os.path.join("game_assets/enemies/warrior", "warrior1.png"))
         self.path_pos = 0
         self.move_count = 0
         self.move_distance = 0
         self.imgs = []
         self.flipped = False
         self.max_health = 0
+        self.speed_increase = 1
 
     def draw(self, win):
         """draws the enemy with the given images"""
@@ -33,17 +35,16 @@ class Enemy:
         for dot in self.path:
             pygame.draw.circle(win, (255, 0, 0), dot, 10, 0)
         win.blit(self.img, (self.x - self.img.get_width() / 2, self.y - self.img.get_height() / 2))
-        self.draw_health_var(win)
-        self.move()
+        self.draw_health_bar(win)
 
-    def draw_health_var(self, win):
+    def draw_health_bar(self, win):
         """Draws health bar above unit"""
         lenght = 50
-        move_by = round(lenght / self.max_health)
-        health_bar = move_by * self.health
+        move_by = lenght / self.max_health
+        health_bar = round(move_by * self.health)
 
-        pygame.draw.rect(win, (255, 0, 0), (self.x - 25, self.y - 30, lenght, 10), 0)
-        pygame.draw.rect(win, (0, 255, 0), (self.x - 25, self.y - 30, health_bar, 10), 0)
+        pygame.draw.rect(win, (255, 0, 0), (self.x - 35, self.y - 40, lenght, 10), 0)
+        pygame.draw.rect(win, (0, 255, 0), (self.x - 35, self.y - 40, health_bar, 10), 0)
 
     def collide(self, X, Y):
         """Returns if the position has hit enemy"""
@@ -63,7 +64,7 @@ class Enemy:
         # self.move_count += 1
         dirn = ((x2 - self.x)*2, (y2 - self.y)*2)
         length = math.sqrt((dirn[0]) ** 2 + (dirn[1]) ** 2)
-        dirn = ((dirn[0]) / length, (dirn[1]) / length)
+        dirn = (dirn[0] / length * self.speed_increase, (dirn[1]) / length * self.speed_increase)
         if x1 == 942:
             print(dirn)
 

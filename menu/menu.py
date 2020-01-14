@@ -46,6 +46,23 @@ class Button:
         self.y = self.menu.y - 110
 
 
+class PlayPauseButton(Button):
+    def __init__(self, play_img, pause_img, x, y):
+        self.img = play_img
+        self.play = play_img
+        self.pause = pause_img
+        self.x = x
+        self.y = y
+        self.width = self.img.get_width()
+        self.height = self.img.get_height()
+        self.paused = True
+
+    def draw(self, win):
+        if self.paused:
+            win.blit(self.play, (self.x, self.y))
+        else:
+            win.blit(self.pause, (self.x, self.y))
+
 class Menu:
 
     def __init__(self, tower, x, y, img, item_cost):

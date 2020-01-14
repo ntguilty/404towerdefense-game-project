@@ -46,12 +46,13 @@ class LongRangeTower(Tower):
         for enemy in enemies:
             en_x = enemy.x
             en_y = enemy.y
-            dis = math.sqrt((self.x - en_x) ** 2 + (self.y - en_y) ** 2)
+            dis = math.sqrt((self.x + enemy.img.get_width()/2 - en_x) ** 2 + (self.y + enemy.img.get_height()/2 - en_y) ** 2)
             if dis < self.range:
                 self.inRange = True
                 enemy_closest.append(enemy)
 
-        enemy_closest.sort(key=lambda x: x.x)
+        enemy_closest.sort(key=lambda x: x.path_pos)
+        enemy_closest = enemy_closest[::-1]
         # to bedzie przydatne w lucznikach.
         # flipowanie obrazka w zaleznosci czy przeciwnik jest z lewej lub prawej strony
         # """
@@ -60,7 +61,10 @@ class LongRangeTower(Tower):
             if time.time() - self.timer > 0.5:
                 self.timer = time.time()
                 if first_enemy.hit(self.damage) == True:
+                    income = first_enemy.worth
                     enemies.remove(first_enemy)
+                    return income
+
             if first_enemy.x > self.x and not (self.left):
                 self.left = True
                 for x, img in enumerate(self.imgs):
@@ -69,4 +73,5 @@ class LongRangeTower(Tower):
                 self.left = False
                 for x, img in enumerate(self.imgs):
                     self.imgs[x] = pygame.transform.flip(img, True, False)
+        return 0
         # """

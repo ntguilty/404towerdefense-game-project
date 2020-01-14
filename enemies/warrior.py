@@ -14,6 +14,8 @@ class Warrior(Enemy):
 
     def __init__(self):
         super().__init__()
+        self.name = "warior"
+        self.worth = 15
         self.imgs = imgs[:]
         self.max_health = 6
         self.health = self.max_health

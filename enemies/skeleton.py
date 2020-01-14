@@ -14,6 +14,8 @@ for x in range(1, 5):
 class Skeleton(Enemy):
     def __init__(self):
         super().__init__()
+        self.name = "skeleton"
+        self.worth = 5
         self.max_health = 2
         self.health = self.max_health
         self.imgs = imgs[:]

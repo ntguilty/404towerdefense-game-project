@@ -2,16 +2,17 @@ import pygame
 import os
 from menu.menu import Menu
 
-menu_bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "menu.png")), (120,70))
-upgrade_btn = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "one_player.png")), (50,50))
+menu_bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "menu.png")), (120, 70))
+upgrade_btn = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "one_player.png")), (50, 50))
+
 
 class Tower:
-    """Abstract class for towers?"""
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.width = 0
         self.height = 0
+        self.range = 0
         self.price = [0, 0, 0]
         self.level = 1
         self.selected = False
@@ -24,9 +25,9 @@ class Tower:
     def draw(self, win):
         # TODO: dodaj wiecej spritow zeby pokazac ulepszanie wiez, ustawione normalnie na self.level - 1
         img = self.imgs[0]
-        win.blit(img, (self.x - img.get_width()/2, self.y - img.get_height()/2))
+        win.blit(img, (self.x - img.get_width() / 2, self.y - img.get_height() / 2))
 
-        #draw menu
+        # draw menu
         if self.selected:
             self.menu.draw(win)
 
@@ -43,8 +44,8 @@ class Tower:
         and selects tower if it was clicked"""
         # tu zmienione również z self.level - 1 na 0 z powodu brakow spritow
         img = self.imgs[0]
-        if X <= self.x - img.get_width()//2 + self.width and X >= self.x - img.get_width()//2:
-            if Y <= self.y + self.height - img.get_height()//2 and Y >= self.y - img.get_height()//2:
+        if X <= self.x - img.get_width() // 2 + self.width and X >= self.x - img.get_width() // 2:
+            if Y <= self.y + self.height - img.get_height() // 2 and Y >= self.y - img.get_height() // 2:
                 return True
         return False
 
@@ -56,7 +57,7 @@ class Tower:
             self.damage += 1
 
     def get_upgrade_cost(self):
-        return self.price[self.level-1]
+        return self.price[self.level - 1]
 
     def move(self, x, y):
         self.x = x
