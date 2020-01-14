@@ -27,9 +27,6 @@ class Enemy:
 
     def draw(self, win):
         """draws the enemy with the given images"""
-        self.animation_count += 1
-        if self.animation_count >= len(self.imgs):
-            self.animation_count = 0
         self.img = self.imgs[self.animation_count]
 
         for dot in self.path:
@@ -55,6 +52,9 @@ class Enemy:
 
     def move(self):
         """Moves enemy"""
+        self.animation_count += 1
+        if self.animation_count >= len(self.imgs):
+            self.animation_count = 0
         x1, y1 = self.path[self.path_pos]
         if self.path_pos + 1 >= len(self.path):
             x2, y2 = (1100, 250)
