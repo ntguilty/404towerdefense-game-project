@@ -60,7 +60,7 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemys = []
         self.units = []
-        self.attack_towers = [LongRangeTower(840, 420)]
+        self.attack_towers = [LongRangeTower(920, 280)]
         self.support_towers = [RangeTower(810, 550), DamageTower(660, 300)]
         self.lives = 10
         self.money = 500000
@@ -83,7 +83,9 @@ class Game:
         if sum(self.current_wave) == 0:
             if len(self.enemys) == 0:
                 self.wave += 1
-                self.current_wave = waves[self.wave]
+                if self.wave >= len(waves):
+                    self.wave = 0
+                self.current_wave = waves[self.wave][:]
                 self.pause = True
                 self.playPauseButton.paused = self.pause
         else:
@@ -186,10 +188,11 @@ class Game:
                 to_del = []
                 for en in self.enemys:
                     en.move()
-                    if en.x > 1000:
+                    if en.x > 1250 and en.y < 225:
                         to_del.append(en)
                 # delete all the enemies
                 for d in to_del:
+                    self.lives -= 1
                     self.enemys.remove(d)
 
                 # TODO: jesli sie uda zrobic przeciwnika to trzeba zupdatowac atak o dodawanie pieniedzy
@@ -251,15 +254,22 @@ class Game:
         money = pygame.transform.scale(money_img, (35, 35))
         start_x = self.width - 35
 
-        self.win.blit(text, (start_x - text.get_width() - 1, 42))
-        self.win.blit(money, (start_x, 35))
+        self.win.blit(text, (start_x - text.get_width() - 1, 10))
+        self.win.blit(money, (start_x, 10))
 
         # draw lives
         # TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
-        life = pygame.transform.scale(lives_img, (32, 32))
-        start_x = self.width - life.get_width() - 5
-        for x in range(self.lives):
-            self.win.blit(life, (start_x - life.get_width() * x + 5, 10))
+        lenght = 300
+        move_by = lenght / 10
+        health_bar = round(move_by * self.lives)
+
+        pygame.draw.rect(self.win, (255, 0, 0), (1270, 33, lenght, 10), 0)
+        pygame.draw.rect(self.win, (0, 255, 0), (1270, 33, health_bar, 10), 0)
+
+        #life = pygame.transform.scale(lives_img, (32, 32))
+        #start_x = self.width - life.get_width() - 5
+        #for x in range(self.lives):
+        #    self.win.blit(life, (start_x - life.get_width() * x + 5, 10))
 
         pygame.display.update()
 
