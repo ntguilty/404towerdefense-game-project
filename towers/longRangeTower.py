@@ -61,7 +61,7 @@ class LongRangeTower(Tower):
         for enemy in enemies:
             en_x = enemy.x
             en_y = enemy.y
-            dis = math.sqrt((self.x + enemy.img.get_width()/2 - en_x) ** 2 + (self.y + enemy.img.get_height()/2 - en_y) ** 2)
+            dis = math.sqrt((self.x - en_x) ** 2 + (self.y - en_y) ** 2)
             if dis < self.range:
                 self.inRange = True
                 enemy_closest.append(enemy)

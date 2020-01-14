@@ -85,6 +85,7 @@ class Game:
                 self.wave += 1
                 self.current_wave = waves[self.wave]
                 self.pause = True
+                self.playPauseButton.paused = self.pause
         else:
             wave_enemies = [Skeleton(), Warrior()]
             for x in range(len(self.current_wave)):
