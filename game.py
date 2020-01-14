@@ -102,7 +102,7 @@ class Game:
                     break
 
     def run(self):
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(loops=-1)
         run = True
         clock = pygame.time.Clock()
         while run:
