@@ -3,7 +3,10 @@ import os
 import math
 import time
 from .tower import Tower
+from menu.menu import Menu
 
+menu_bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "menu.png")), (120,70))
+upgrade_btn = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "one_player.png")), (50,50))
 
 # TODO: dodać animacje wież(jakąkolwiek)
 # TODO: dodac jakiegos normalnego sprita do LongRangeTower
@@ -19,6 +22,9 @@ class LongRangeTower(Tower):
         self.oryginal_damage = 1
         self.damage = self.oryginal_damage
         self.width = self.height = 128
+
+        self.menu = Menu(self, self.x, self.y, menu_bg, [4000, 8000, "MAX"])
+        self.menu.add_btn(upgrade_btn, "Upgrade")
 
         self.imgs.append(
             pygame.transform.scale(pygame.image.load(os.path.join("game_assets/towers/", "base1.png")), (128, 128)))

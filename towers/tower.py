@@ -16,13 +16,14 @@ class Tower:
         self.level = 1
         self.selected = False
         # define menu and buttons
-        self.menu = Menu(self.x, self.y, menu_bg)
+        self.menu = Menu(self, self.x, self.y, menu_bg, [2000, "MAX"])
         self.menu.add_btn(upgrade_btn, "Upgrade")
         self.imgs = []
         self.damage = 1
 
     def draw(self, win):
-        img = self.imgs[self.level - 1]
+        # TODO: dodaj wiecej spritow zeby pokazac ulepszanie wiez, ustawione normalnie na self.level - 1
+        img = self.imgs[0]
         win.blit(img, (self.x - img.get_width()/2, self.y - img.get_height()/2))
 
         #draw menu
@@ -40,7 +41,8 @@ class Tower:
     def click(self, X, Y):
         """Returns if tower has been clicked on
         and selects tower if it was clicked"""
-        img = self.imgs[self.level - 1]
+        # tu zmienione również z self.level - 1 na 0 z powodu brakow spritow
+        img = self.imgs[0]
         if X <= self.x - img.get_width()//2 + self.width and X >= self.x - img.get_width()//2:
             if Y <= self.y + self.height - img.get_height()//2 and Y >= self.y - img.get_height()//2:
                 return True
@@ -48,8 +50,10 @@ class Tower:
 
     def upgrade(self):
         """Upgrades towers to higher tier at given cost"""
-        self.level += 1
-        self.damage += 1
+        # instead of next sprites is only block by number
+        if self.level < 2:
+            self.level += 1
+            self.damage += 1
 
     def get_upgrade_cost(self):
         return self.price[self.level-1]
