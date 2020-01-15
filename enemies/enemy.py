@@ -28,6 +28,7 @@ class Enemy:
         self.flipped = False
         self.max_health = 0
         self.speed_increase = 5
+        self.if_hitted = None
 
     def draw(self, win):
         """draws the enemy with the given images"""

@@ -1,7 +1,9 @@
 import pygame
 import os
 from enemies.skeleton import Skeleton
+from enemies.wizard import Wizard
 from enemies.warrior import Warrior
+from enemies.boss import Boss
 from menu.menu import PlayPauseButton
 from towers.longRangeTower import LongRangeTower
 from towers.enemyBase import EnemyBase
@@ -47,11 +49,11 @@ waves = [
     [30, 0],
     [50, 0],
     [0, 15],
-    [0, 30],
+    [0, 0, 5, 1],
     [0, 50],
     [10, 10],
     [20, 20],
-    [30, 30]
+    [10, 15, 20, 3]
 ]
 
 
@@ -72,7 +74,7 @@ class Game:
         self.font = pygame.font.SysFont("comicsans", 35)
         self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
         self.selected_tower = None
-        self.wave = 0
+        self.wave = 4
         self.current_wave = waves[self.wave][:]
         self.pause = True
         self.music_on = True
@@ -94,7 +96,7 @@ class Game:
                 self.pause = True
                 self.playPauseButton.paused = self.pause
         else:
-            wave_enemies = [Skeleton(), Warrior()]
+            wave_enemies = [Skeleton(), Warrior(), Wizard(), Boss()]
             for x in range(len(self.current_wave)):
                 if self.current_wave[x] != 0:
                     self.enemys.append(wave_enemies[x])
