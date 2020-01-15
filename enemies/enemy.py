@@ -9,7 +9,6 @@ class Enemy:
         self.height = 32
         self.animation_count = 0
         self.health = 1
-        self.vel = 1  # velocity - how fast unit moves
         self.path = [(113, 559), (110, 607),(108, 652), (109, 701), (107, 752), (109, 802), (118, 852), (141, 889), (178, 919),
                      (225, 943), (293, 946), (367, 946), (430, 947), (486, 945), (560, 947), (625, 940), (654, 908), (667, 852),
                      (623, 799), (565, 760), (505, 718), (460, 665), (479, 586), (550, 538), (598, 477), (593, 397), (579, 301),
@@ -26,6 +25,7 @@ class Enemy:
         self.flipped_vert = False
         self.flipped_hor = False
         self.flipped = False
+        self.nextGoal = False
         self.max_health = 0
         self.speed_increase = 5
         self.if_hitted = None
@@ -98,16 +98,20 @@ class Enemy:
             if dirn[1] >= 0:  # moving down
                 if self.x >= x2 and self.y >= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
             else:  # moving up
                 if self.x >= x2 and self.y <= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
         else:  # moving left
             if dirn[1] >= 0:  # moving down
                 if self.x <= x2 and self.y >= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
             else:  # moving up
                 if self.x <= x2 and self.y <= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
 
 
     def hit(self, damage):

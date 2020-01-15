@@ -1,4 +1,5 @@
 from game import Game
+from multi import Multiplayer
 import pygame
 import os
 
@@ -15,6 +16,7 @@ class MainMenu:
         self.bg = pygame.transform.scale(self.bg, (self.width, self.height))
         self.win = pygame.display.set_mode((self.width, self.height))
         self.btn= (self.width/2 - start_btn_single.get_width()/2 - 250, 500, start_btn_single.get_width(), start_btn_single.get_height())
+        self.mult_btn = (self.width/2 - start_btn_double.get_width()/2 + 250, 500, start_btn_double.get_width(), start_btn_double.get_height())
 
     def run(self):
         run = True
@@ -31,6 +33,11 @@ class MainMenu:
                     if self.btn[0] <= x <= self.btn[0] + self.btn[2]:
                         if self.btn[1] <= y <= self.btn[1] + self.btn[3]:
                             game = Game()
+                            game.run()
+                            del game
+                    if self.mult_btn[0] <= x <= self.mult_btn[0] + self.mult_btn[2]:
+                        if self.mult_btn[1] <= y <= self.mult_btn[1] + self.mult_btn[3]:
+                            game = Multiplayer()
                             game.run()
                             del game
             self.draw()

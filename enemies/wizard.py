@@ -81,13 +81,17 @@ class Wizard(Enemy):
             if dirn[1] >= 0:  # moving down
                 if self.x >= x2 and self.y >= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
             else:  # moving up
                 if self.x >= x2 and self.y <= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
         else:  # moving left
             if dirn[1] >= 0:  # moving down
                 if self.x <= x2 and self.y >= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
             else:  # moving up
                 if self.x <= x2 and self.y <= y2:
                     self.path_pos += 1
+                    self.nextGoal = True
