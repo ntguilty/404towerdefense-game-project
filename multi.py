@@ -76,6 +76,7 @@ class Multiplayer:
 
     def switch_players(self):
         self.current_player.points += 30 + self.pointsGained
+        self.pointsGained = 0
         if self.playersTurn == 0:
             self.current_player = self.player2
             self.playersTurn = 1
