@@ -41,20 +41,18 @@ sound_btn = pygame.transform.scale(
 sound_btn_off = pygame.transform.scale(
     pygame.image.load(os.path.join("game_assets/support_stuff/music", "sound_off_button.png")).convert_alpha(), (75, 75))
 
-# TODO: jak juz doda sie wiecej przeciwnikow to trzeba je zupdatowac. Moze nawet wymyslec lepszy sposob na ich
-#  wysylanie (Kacpur) fale przeciwnikow format : (# skeleton, # warrior)
 
-waves = [
-    [15, 0],
-    [30, 0],
-    [50, 0],
-    [0, 15],
-    [0, 0, 5, 1],
-    [0, 50],
-    [10, 10],
-    [20, 20],
-    [10, 15, 20, 3]
-]
+# (<int> birds, <int> warrior, <int> wizard, <int> boss)
+waves = [[10, 0],
+         [20, 3],
+         [30, 5],
+         [0, 10],
+         [0, 15, 3, 0],
+         [0, 20, 5, 1],
+         [5, 10, 10, 0],
+         [10, 15, 15, 0],
+         [15, 15, 20, 3]]
+
 
 
 class Game:
@@ -71,10 +69,10 @@ class Game:
         self.bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets/support_stuff", "map.png")),
                                          (1600, 1000))
         self.timer = time.time()
-        self.font = pygame.font.SysFont("comicsans", 35)
-        self.clicks = []  # TODO: wyrzucić na sam koniec(zostawione by ustawić path na nowej mapie)
+        self.font = pygame.font.SysFont("comicsans", 70)
+        self.clicks = []
         self.selected_tower = None
-        self.wave = 4
+        self.wave = 0
         self.current_wave = waves[self.wave][:]
         self.pause = True
         self.music_on = True
@@ -110,9 +108,6 @@ class Game:
         while run:
             clock.tick(60)
             # generowanie potworow:
-            # TODO: ten if jest do usuniecia jak sie wstawi przycisk do wypuszczenia fali
-            #            if len(self.enemys) == 0:
-            #                self.pause = False
             if self.pause == False:
                 if time.time() - self.timer > random.randrange(1, 5):
                     self.timer = time.time()
@@ -295,23 +290,22 @@ class Game:
         # draw sound on/off button
         self.soundButton.draw(self.win)
 
-        # TODO: trzeba trzeba ladnie ulozyc zycia i pieniadze
         # draw money
         text = self.font.render(str(self.money), 1, (255, 255, 255))
-        money = pygame.transform.scale(money_img, (35, 35))
+        money = pygame.transform.scale(money_img, (55, 55))
         start_x = self.width - 35
+        self.win.blit(text, (10, 10))
+        self.win.blit(money, (115, 5))
 
-        self.win.blit(text, (start_x - text.get_width() - 1, 10))
-        self.win.blit(money, (start_x, 10))
 
         # draw lives
-        # TODO: dokonczyc pokazywanie i tracenie zyc(Pjotero)
         lenght = 300
         move_by = lenght / 10
         health_bar = round(move_by * self.lives)
 
         pygame.draw.rect(self.win, (255, 0, 0), (1270, 33, lenght, 10), 0)
         pygame.draw.rect(self.win, (0, 255, 0), (1270, 33, health_bar, 10), 0)
+
 
         # life = pygame.transform.scale(lives_img, (32, 32))
         # start_x = self.width - life.get_width() - 5

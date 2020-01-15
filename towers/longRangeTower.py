@@ -9,12 +9,11 @@ menu_bg = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "
 upgrade_btn = pygame.transform.scale(pygame.image.load(os.path.join("game_assets", "upg.png")), (50,50))
 
 # TODO: dodać animacje wież(jakąkolwiek)
-# TODO: dodac jakiegos normalnego sprita do LongRangeTower
 class LongRangeTower(Tower):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.imgs = []
-        self.oryginal_range = 200
+        self.oryginal_range = 150
         self.range = self.oryginal_range
         self.inRange = False
         self.left = True

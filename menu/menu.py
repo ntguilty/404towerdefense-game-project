@@ -103,9 +103,9 @@ class Menu:
         win.blit(self.bg, (self.x - self.bg.get_width()/2, self.y-120))
         for item in self.buttons:
             item.draw(win)
-            win.blit(upg, (item.x + item.width + 5, item.y-9))
+            win.blit(upg, (item.x + item.width + 32, item.y+12))
             text = self.font.render(str(self.item_cost[self.tower.level - 1]), 1, (255,255,255))
-            win.blit(text, (item.x + item.width + 30 - text.get_width()/2, item.y + upg.get_height() -8))
+            win.blit(text, (item.x + item.width + 15 - text.get_width()/2, item.y + upg.get_height() -8))
 
     def get_clicked(self, X, Y):
         for btn in self.buttons:

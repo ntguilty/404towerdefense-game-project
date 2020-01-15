@@ -15,7 +15,7 @@ range_imgs = [
 class RangeTower(Tower):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.range = 200
+        self.range = 150
         self.effect = [0.2, 0.4]
         self.imgs = range_imgs[:]
         self.width = self.height = 128
@@ -56,7 +56,7 @@ damage_imgs = [
 class DamageTower(Tower):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.range = 200
+        self.range = 150
         self.effect = [2, 4]
         self.imgs = damage_imgs[:]
         self.width = self.height = 128

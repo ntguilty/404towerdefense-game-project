@@ -5,8 +5,7 @@ import time
 from .longRangeTower import LongRangeTower
 
 
-# TODO: jak sie uda to bedzie to baza 2giego gracza
-# TODO: jak na razie nie jest wykorzystana ta klasa
+# TODO: jak sie uda to bedzie to baza 2giego gracza,a jak na razie nie jest wykorzystana ta klasa
 class EnemyBase(LongRangeTower):
     def __init__(self, x, y):
         super().__init__(x, y)
