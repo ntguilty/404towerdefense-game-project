@@ -241,6 +241,17 @@ class Game:
 
         pygame.quit()
 
+    def point_to_line(self, tower):
+        """
+        returns if you can place tower based on distance from
+        path
+        :param tower: Tower
+        :return: Bool
+        """
+        # find two closest points
+        return True
+
+
     def draw(self):
         self.win.blit(self.bg, (0, 0))
 
@@ -320,5 +331,5 @@ class Game:
             print(str(e) + "NOT VALID NAME")
 
 
-g = Game()
-g.run()
+#g = Game()
+#g.run()
